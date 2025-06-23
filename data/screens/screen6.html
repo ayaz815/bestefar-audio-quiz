@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Music App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -32,6 +35,70 @@
       .font-arial-black {
         font-family: "Arial Black", sans-serif;
       }
+
+      .formatted-quill-content * {
+        line-height: 1.2;
+        white-space: normal;
+        font: inherit;
+        color: inherit;
+      }
+
+      /* Keep spacing and bullets */
+      .formatted-quill-content p {
+        margin-bottom: 1.4rem;
+      }
+
+      .formatted-quill-content ul {
+        padding-left: 1.5em;
+        margin-bottom: 1.2rem;
+        list-style-type: disc;
+      }
+
+      .formatted-quill-content ol {
+        padding-left: 1.5em;
+        margin-bottom: 1.2rem;
+        list-style-type: decimal;
+      }
+
+      .formatted-quill-content li {
+        margin-bottom: 0.5em;
+      }
+
+      .formatted-quill-content strong {
+        font-weight: bold;
+      }
+
+      .formatted-quill-content em {
+        font-style: italic;
+      }
+
+      .formatted-quill-content blockquote {
+        border-left: 4px solid #ccc;
+        padding-left: 1em;
+        color: #555;
+        font-style: italic;
+        margin: 1em 0;
+      }
+
+      .formatted-quill-content a {
+        color: #2563eb;
+        text-decoration: underline;
+      }
+
+      .formatted-quill-content ol {
+        list-style-type: decimal;
+        padding-left: 1.5em;
+        margin-bottom: 1em;
+      }
+
+      /* Hide scrollbar across all major browsers */
+      .scrollbar-hide {
+        -ms-overflow-style: none; /* IE & Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
     </style>
   </head>
 
@@ -60,18 +127,17 @@
 
       <!-- Title Section -->
       <div class="relative py-[2%]">
-        <h1 class="sm:text-4xl text-5xl text-black text-center font-agency">
+        <!-- <h1 class="sm:text-4xl text-4xl text-black text-center font-agency">
           6.
-        </h1>
-        <h1 class="sm:text-4xl text-5xl text-black text-center font-agency">
-          Melodi
+        </h1> -->
+        <h1 class="sm:text-4xl text-4xl text-black text-center font-agency">
+          6. Melodi
         </h1>
         <img
-          src="../assets/pointer-down.png"
+          src="../assets/pointer-down-fixed.png"
           alt=""
-          class="absolute w-[20%] right-3 sm:top-10 top-12 -rotate-8"
+          class="absolute w-[20%] right-3 sm:top-10 top-12 transform-none"
         />
-
         <!-- Right Top Navigation (25%) -->
         <div
           id="rightTopNav"
@@ -81,7 +147,7 @@
 
       <!-- Music Section -->
       <div
-        class="bg-black flex flex-col items-center justify-center music-section flex-grow"
+        class="bg-black flex flex-col items-center justify-between music-section flex-grow"
       >
         <p
           class="sm:text-lg text-lg text-center font-bold text-[#FFC000] py-[5%] font-arial-black"
@@ -101,14 +167,14 @@
           <!-- Left Top Navigation (25%) -->
           <div
             id="leftTopNav"
-            class="absolute top-0 left-0 w-[25%] h-[50px] cursor-pointer bg-transparent z-[50] pointer-events-auto"
-            onclick="navigateToScreen('./screen18.html')"
+            class="absolute top-0 left-0 w-[10%] h-[35px] cursor-pointer bg-transparent z-[50] pointer-events-auto"
+            onclick="navigateToScreen('./screen.html')"
           ></div>
 
           <!-- Right Top Navigation (25%) -->
           <div
             id="rightTopNav"
-            class="absolute top-0 right-0 w-[25%] h-[50px] cursor-pointer bg-transparent z-[50] pointer-events-auto"
+            class="absolute top-0 right-0 w-[10%] h-[35px] cursor-pointer bg-transparent z-[50] pointer-events-auto"
             onclick="navigateToScreen('./screen18.html')"
           ></div>
         </button>
@@ -129,29 +195,42 @@
           Spørsmålet
         </h1>
         <img
-          src="../assets/pointer-down.png"
+          src="../assets/pointer-down-fixed.png"
           alt=""
-          class="absolute w-[20%] right-3 top-0 transform-rotate-8"
+          class="absolute w-[20%] right-3 top-0 transform-none"
         />
       </div>
 
       <!-- Mic Section -->
+      <!-- <div
+        class="bg-black flex flex-col justify-between mic-section toggle-question-area cursor-pointer h-[28vh] sm:h-[27vh] px-[2%] sm:px-[8%] pt-[4%] pb-[2%]"
+      > -->
       <div
         class="bg-black flex flex-col items-center justify-center mic-section toggle-question-area cursor-pointer flex h-full"
       >
         <p
-          class="w-full sm:text-md text-lg text-center font-normal text-[#FFC000] py-[2%] px-[2%] sm:px-[8%] font-arial-normal"
           id="question-text"
+          class="w-full text-center text-[#FFC000] font-arial-normal overflow-y-auto px-[2%] sm:px-[8%] py-[2%] text-lg sm:text-md h-[12vh] sm:h-[20vh] md:h-[25vh]"
+          style="scrollbar-width: none; -ms-overflow-style: none"
         ></p>
-        <button
-          class="speaker-btn relative group mb-0.5 bg-transparent hover:border-none border-none focus-visible:outline-none focus:outline-none"
-        >
-          <img
-            src="../assets/speaker.jpg"
-            alt="Speaker"
-            class="sm:w-16 w-20 mic-icon py-[0.5%]"
-          />
-        </button>
+
+        <style>
+          #question-text::-webkit-scrollbar {
+            display: none;
+          }
+        </style>
+
+        <div class="flex justify-center">
+          <button
+            class="speaker-btn relative group mb-0.5 bg-transparent hover:border-none border-none focus-visible:outline-none focus:outline-none"
+          >
+            <img
+              src="../assets/speaker.jpg"
+              alt="Speaker"
+              class="sm:w-16 w-20 mic-icon py-[0.5%]"
+            />
+          </button>
+        </div>
       </div>
 
       <!-- Answer Section -->
@@ -163,7 +242,7 @@
             Det korrekt svaret er
           </p>
           <p
-            class="text-xl pt-2 font-bold answer-text opacity-0 pointer-events-none transition-all duration-300 font-arial-black"
+            class="pt-2 px-4 text-center answer-text opacity-0 pointer-events-none transition-all duration-300 font-arial-black-normal"
             id="answer-text"
           >
             I am ayaz
@@ -180,38 +259,80 @@
         >
           Nyttig å vite
         </button> -->
-        <button class="" id="fact-info-button" onclick="showFactInfo()">
-          <img src="../assets/vite.jpg" alt="" class="w-36 mb-2" />
+        <button
+          class=""
+          id="fact-info-button cursor-pointer"
+          onclick="showFactInfo()"
+        >
+          <img src="../assets/vite.jpg" alt="" class="w-40 mb-6" />
         </button>
       </div>
 
       <!-- Fact Info Drawer (Same Width as Center Screen) -->
       <div class="relative">
         <div class="sm:w-full sm:block hidden"></div>
+
         <div
           id="factDrawer"
-          class="overflow-y-auto scrollbar-hide absolute -bottom-[100px] h-[90vh] left-1/2 transform -translate-x-1/2 z-50 w-full transform translate-y-full transition-transform duration-300 hidden"
+          class="mb-[2%] sm:mb-[4%] absolute -bottom-[100px] h-[93vh] left-1/2 transform -translate-x-1/2 z-50 w-full translate-y-full transition-transform duration-300 hidden"
         >
-          <div class="bg-transparent w-full flex justify-center">
+          <!-- Close Button -->
+          <div
+            class="bg-transparent w-full flex justify-center pt-[5%] sm:pt-[3%]"
+          >
             <button
               id="closeFactDrawer"
-              class="px-4 py-1 text-2xl bg-blue-500 text-white hover:bg-red-600 transition"
+              class="px-8 py-4 text-2xl bg-blue-500 text-white hover:bg-red-600 transition w-20 h-15"
             >
               &#x2193;
             </button>
           </div>
-          <div class="h-full w-full bg-[#FFC000] px-6 pb-6 overflow-y-auto">
-            <h2 class="text-lg font-bold text-black mb-2">Nyttig å vite</h2>
-            <ul class="list-disc list-inside text-black">
-              <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-              <li>
-                Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.
-              </li>
-              <li>Fusce nec tellus sed augue semper porta.</li>
-              <li>Curabitur sodales ligula in libero.</li>
-            </ul>
+
+          <!-- Scrollable Content with Hidden Scrollbar -->
+          <div
+            class="h-[calc(100%-11rem)] py-2 bg-[#FFC000] px-6 overflow-y-auto scrollbar-hide"
+          >
+            <div
+              id="factDrawerContent"
+              class="text-black formatted-quill-content"
+            >
+              <p><strong>Welcome to the Music App</strong></p>
+
+              <p>
+                This is an <em>example</em> paragraph with
+                <strong>bold</strong> and <em>italic</em> formatting to test how
+                the content looks.
+              </p>
+
+              <p>
+                <a href="https://example.com" target="_blank">Click here</a> to
+                view the documentation.
+              </p>
+
+              <blockquote>
+                “Music is the universal language of mankind.” – Henry Wadsworth
+                Longfellow
+              </blockquote>
+
+              <p>Here is a list of things we support:</p>
+              <ul>
+                <li>Audio playback</li>
+                <li>Quill formatting</li>
+                <li>Scroll hiding</li>
+                <li>Mobile responsive layout</li>
+              </ul>
+
+              <p>Steps to get started:</p>
+              <ol>
+                <li>Open the app</li>
+                <li>Click the <strong>Play</strong> button</li>
+                <li>Record your answer</li>
+                <li>Submit and review</li>
+              </ol>
+            </div>
           </div>
         </div>
+
         <div class="sm:w-full sm:block hidden"></div>
       </div>
 

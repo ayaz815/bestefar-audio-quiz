@@ -2,7 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <title>Music App</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -24,11 +32,13 @@
       class="fullscreen-target w-full sm:w-[1500px] lg:w-[70%] h-screen bg-black flex flex-col justify-between main-container opacity-0 transition-opacity duration-200"
       id="screen2FullScreen"
     >
-      <!-- <div
-        id="leftNavigation"
-        class="absolute top-0 left-0 w-[10%] h-full z-20 cursor-pointer bg-transparent transition-all"
-        onclick="navigateToScreen('./data/screens/screen19.html')"
-      ></div> -->
+      <!-- Right Top Navigation (25%) -->
+      <div
+        id="rightTopNav"
+        class="absolute top-0 right-0 w-[25%] h-[50px] cursor-pointer bg-transparent z-[50] pointer-events-auto"
+        onclick="navigateToScreen('./data/screens/screen18.html')"
+      ></div>
+
       <div
         id="rightNavigation"
         class="absolute top-0 right-0 w-[10%] h-full z-20 cursor-pointer bg-transparent transition-all"
@@ -40,17 +50,37 @@
         <!-- <img src="data/signals.png" alt="" class="w-20 pt-1" /> -->
       </div>
       <div class="flex flex-col justify-end items-center h-full pb-2">
-        <img
-          src="./data/assets/quiz.png"
-          alt=""
-          class="w-1/4 h-auto mb-5 mt-0"
-        />
+        <div class="relative flex justify-center items-center w-full mb-5 mt-0">
+          <!-- Main Quiz Image -->
+          <img
+            src="./data/assets/quiz.png"
+            alt="Quiz"
+            class="w-1/4 h-auto z-10"
+          />
+
+          <!-- Overlay Image (initially visible) -->
+          <!-- <img
+            id="introOverlay"
+            src="./data/assets/phonto.jpeg"
+            alt="Intro"
+            class="absolute z-20 w-1/2 h-auto opacity-100 transition-opacity duration-1000"
+          /> -->
+        </div>
+
         <img
           src="data/assets/logo.jpg"
           alt=""
           class="w-full px-[5%] mb-3 mt-0"
         />
       </div>
+      <!-- Fullscreen Trigger Button -->
+      <button
+        id="fullscreenBtn"
+        class="fixed bottom-6 right-6 z-50 bg-[#FFC000] text-black font-agency px-4 py-2 rounded-lg shadow-md hover:bg-[#ffb300]"
+      >
+        Enter Fullscreen
+      </button>
+
       <button
         id="quizName"
         class="flex justify-center items-start h-full w-full pt-2 font-agency text-3xl text-[#FFC000] bg-transparent hover:border-none border-none focus-visible:outline-none focus:outline-none"

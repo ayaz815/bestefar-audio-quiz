@@ -1,4 +1,11 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  window.addEventListener("load", () => {
+    const overlay = document.getElementById("introOverlay");
+    setTimeout(() => {
+      if (overlay) overlay.style.display = "none";
+    }, 3000); // 3 seconds
+  });
+
   // const jsonFilePath = ".././content/content.json";
   let jsonFilePath;
 
@@ -28,6 +35,16 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.log(screenId, screenData);
 
       if (screenData) {
+        const musicTypeElement = document.getElementById("music-type-name");
+        if (musicTypeElement) {
+          const name = screenData.firmNaming || "Melodi";
+          const capitalized =
+            name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+          musicTypeElement.textContent = capitalized;
+        } else {
+          console.warn("⚠️ 'Music type' element not found.");
+        }
+
         const quizNameElement = document.getElementById("quizName");
         console.log(quizNameElement);
         if (quizNameElement) {
@@ -127,7 +144,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   musicButtons.forEach((button, index) => {
     const musicImage = musicImages[index];
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
       // Stop all speaker audios before playing music
       if (speakerAudio && !speakerAudio.paused) {
         speakerAudio.pause();
@@ -167,6 +185,61 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
+  // ---------------------- Speaker Button Logic (Completely Independent) -------------------------
+  const speakerAudio = new Audio(`../audioFiles/audio${screenNumber}.mp3`);
+  const speakerButton = document.querySelector(".speaker-btn");
+  const speakerImage = document.querySelector(".speaker-btn img");
+
+  let speakerMuted = false;
+  let speakerPlayedOnce = false;
+
+  if (speakerButton) {
+    speakerButton.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent conflicts with other elements
+
+      // Pause music if speaker is played
+      if (musicPlaying) {
+        musicAudio.pause();
+        musicImages.forEach((img) => (img.src = "../assets/play-red1.png"));
+        musicPlaying = false;
+      }
+
+      // If audio has never been played, start playing it
+      if (!speakerPlayedOnce) {
+        speakerAudio
+          .play()
+          .then(() => {
+            speakerImage.style.filter = "none";
+            speakerImage.style.opacity = "1";
+            speakerMuted = false;
+            speakerPlayedOnce = true;
+          })
+          .catch((err) => console.error("Speaker audio play error:", err));
+        return;
+      }
+
+      // Toggle between mute and unmute
+      speakerMuted = !speakerMuted;
+
+      if (speakerMuted) {
+        speakerAudio.pause();
+        speakerImage.style.opacity = "0.7";
+      } else {
+        speakerAudio
+          .play()
+          .catch((err) => console.error("Speaker audio play error:", err));
+        speakerImage.style.filter = "none";
+        speakerImage.style.opacity = "1";
+      }
+    });
+
+    // Reset speaker button when audio ends
+    speakerAudio.addEventListener("ended", () => {
+      speakerImage.style.opacity = "0.7";
+      speakerMuted = true;
+    });
+  }
+
   //   // Dynamically generate the music elements
   try {
     const response = await fetch(jsonFilePath);
@@ -194,31 +267,36 @@ document.addEventListener("DOMContentLoaded", async function () {
           "flex flex-col items-center justify-start bg-black";
 
         musicElement.innerHTML = `
-         <p class="sm:text-xl text-xl text-center px-[5%] pt-1 text-yellow-400 font-['Arial_Narrow']">
-  ${formattedNumber}
-</p>
-          <p class="sm:text-xl text-xl text-center px-[5%] pt-1 text-yellow-400 font-['Arial_Narrow']" id="music-name-${i}">
-  ${musicName}
-</p>
-           <p class="sm:text-2xl text-2xl text-center px-[5%] pt-1 text-purple-400 font-['Rockwell']" id="artist-name-${i}">
-            ${artistName}
-          </p>
-          <button
-            id="playBtn${i}"
-            class="play-btn bg-transparent hover:border-none border-none focus-visible:outline-none focus:outline-none transition-transform duration-300 hover:scale-105"
-          >
-            <img
-              id="playImg${i}"
-              src="../assets/play-red1.png"
-              alt="Play"
-              class="py-5 sm:py-2 sm:w-17 w-16"
-            />
-          </button>
-          <input
-            type="range"
-            id="seekBar${i}"
-            class="seek-bar w-[80%] h-[3px] my-2 bg-gray-300 accent-gray-500 rounded-lg cursor-pointer focus:outline-none"
-          />
+          <div class="w-full cursor-pointer group" data-screen-target="./screen${i}.html">
+            <p class="sm:text-xl text-xl text-center px-[5%] pt-1 text-yellow-400 font-['Arial_Narrow']">
+              ${formattedNumber}
+            </p>
+            <p class="sm:text-xl text-xl text-center px-[5%] pt-1 text-yellow-400 font-['Arial_Narrow']" id="music-name-${i}">
+              ${musicName}
+            </p>
+            <p class="sm:text-2xl text-2xl text-center px-[5%] pt-1 text-purple-400 font-['Rockwell']" id="artist-name-${i}">
+              ${artistName}
+            </p>
+            
+            <div class="flex flex-col items-center pt-1">
+              <button
+                id="playBtn${i}"
+                class="play-btn bg-transparent hover:border-none border-none focus-visible:outline-none focus:outline-none transition-transform duration-300 hover:scale-105"
+              >
+                <img
+                  id="playImg${i}"
+                  src="../assets/play-red1.png"
+                  alt="Play"
+                  class="py-5 sm:py-2 sm:w-17 w-16"
+                />
+              </button>
+              <input
+                type="range"
+                id="seekBar${i}"
+                class="seek-bar w-[80%] h-[3px] my-2 bg-gray-300 accent-gray-500 rounded-lg cursor-pointer focus:outline-none"
+              />
+            </div>
+          </div>
         `;
 
         // Append to music container
@@ -289,60 +367,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
-  // ---------------------- Speaker Button Logic (Completely Independent) -------------------------
-  const speakerAudio = new Audio(`../audioFiles/audio${screenNumber}.mp3`);
-  const speakerButton = document.querySelector(".speaker-btn");
-  const speakerImage = document.querySelector(".speaker-btn img");
+  document.querySelectorAll("[data-screen-target]").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      // Allow navigation ONLY if the clicked element is a <p> tag
+      // and matches one of the intended elements
+      const targetTag = e.target;
+      const tagName = targetTag.tagName.toLowerCase();
 
-  let speakerMuted = false;
-  let speakerPlayedOnce = false;
+      const isValidClick =
+        tagName === "p" &&
+        (targetTag.id?.startsWith("music-name-") ||
+          targetTag.id?.startsWith("artist-name-") ||
+          /^[0-9]+\./.test(targetTag.textContent.trim())); // Page number match
 
-  if (speakerButton) {
-    speakerButton.addEventListener("click", (event) => {
-      event.stopPropagation(); // Prevent conflicts with other elements
-
-      // Pause music if speaker is played
-      if (musicPlaying) {
-        musicAudio.pause();
-        musicImages.forEach((img) => (img.src = "../assets/play-red1.png"));
-        musicPlaying = false;
-      }
-
-      // If audio has never been played, start playing it
-      if (!speakerPlayedOnce) {
-        speakerAudio
-          .play()
-          .then(() => {
-            speakerImage.style.filter = "none";
-            speakerImage.style.opacity = "1";
-            speakerMuted = false;
-            speakerPlayedOnce = true;
-          })
-          .catch((err) => console.error("Speaker audio play error:", err));
+      if (!isValidClick) {
+        // Prevent navigation if clicked on anything else (seekbar, button, img, etc)
         return;
       }
 
-      // Toggle between mute and unmute
-      speakerMuted = !speakerMuted;
-
-      if (speakerMuted) {
-        speakerAudio.pause();
-        speakerImage.style.opacity = "0.7";
-      } else {
-        speakerAudio
-          .play()
-          .catch((err) => console.error("Speaker audio play error:", err));
-        speakerImage.style.filter = "none";
-        speakerImage.style.opacity = "1";
-      }
+      const target = el.getAttribute("data-screen-target");
+      console.log("🔗 Navigating to quiz screen:", target);
+      window.location.href = target;
     });
-
-    // Reset speaker button when audio ends
-    speakerAudio.addEventListener("ended", () => {
-      speakerImage.style.opacity = "0.7";
-      speakerMuted = true;
-    });
-  }
+  });
 
   // ---------------------- Answer Toggle Logic -------------------------
   const answerDiv = document.querySelector(".toggle-answer-area");
@@ -425,15 +472,26 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Attach event listeners for navigation clicks
   document.getElementById("leftTopNav")?.addEventListener("click", function () {
-    console.log("⬅️ Navigating Left to screen18.html");
-    navigateToScreen("./screen1.html");
+    const base = window.location.pathname.includes("/data/screens/")
+      ? "./screen1.html"
+      : "./data/screens/screen1.html";
+    navigateToScreen(base);
   });
-
   document
     .getElementById("rightTopNav")
     ?.addEventListener("click", function () {
-      console.log("➡️ Navigating Right to screen19.html");
-      navigateToScreen("./screen18.html");
+      // Always navigate to the correct path based on screen number logic
+      const currentPath = window.location.pathname;
+      let nextScreenPath;
+
+      if (currentPath.includes("/data/screens/")) {
+        nextScreenPath = "./screen18.html"; // relative to current screen
+      } else {
+        nextScreenPath = "./data/screens/screen18.html"; // used when on index.html
+      }
+
+      console.log("Navigating to:", nextScreenPath);
+      navigateToScreen(nextScreenPath);
     });
 
   function navigateToScreen(url) {
@@ -677,4 +735,31 @@ showButton.addEventListener("click", () => {
 closeButton.addEventListener("click", () => {
   drawer.classList.remove("translate-y-0");
   drawer.classList.add("transform-none");
+});
+
+function enterFullscreen() {
+  const elem = document.documentElement; // Use full document (recommended)
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen(); // Safari
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen(); // IE11
+  } else {
+    alert("Fullscreen not supported on this browser.");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const fullscreenBtn = document.getElementById("fullscreenBtn");
+  if (fullscreenBtn) {
+    fullscreenBtn.addEventListener("click", () => {
+      enterFullscreen();
+
+      const target = document.getElementById("screen2FullScreen");
+      target.classList.remove("opacity-0");
+      target.classList.add("opacity-100");
+    });
+  }
 });

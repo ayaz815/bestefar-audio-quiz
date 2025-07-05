@@ -50,18 +50,18 @@
 
       .formatted-quill-content ul {
         padding-left: 1.5em;
-        margin-bottom: 1.2rem;
+        margin-bottom: 0.1rem;
         list-style-type: disc;
       }
 
       .formatted-quill-content ol {
         padding-left: 1.5em;
-        margin-bottom: 1.2rem;
+        margin-bottom: 0.1rem;
         list-style-type: decimal;
       }
 
       .formatted-quill-content li {
-        margin-bottom: 0.5em;
+        margin-bottom: 0.1em;
       }
 
       .formatted-quill-content strong {
@@ -97,7 +97,42 @@
         scrollbar-width: none; /* Firefox */
       }
       .scrollbar-hide::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, Opera */
+        display: none;
+      }
+      .formatted-quill-content h1,
+      .formatted-quill-content h2,
+      .formatted-quill-content h3,
+      .formatted-quill-content h4,
+      .formatted-quill-content h5,
+      .formatted-quill-content h6 {
+        font-weight: bold;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+        color: inherit;
+      }
+
+      .formatted-quill-content h1 {
+        font-size: 1.875rem; /* 30px */
+      }
+
+      .formatted-quill-content h2 {
+        font-size: 1.5rem; /* 24px */
+      }
+
+      .formatted-quill-content h3 {
+        font-size: 1.25rem; /* 20px */
+      }
+
+      .formatted-quill-content h4 {
+        font-size: 1.125rem; /* 18px */
+      }
+
+      .formatted-quill-content h5 {
+        font-size: 1rem; /* 16px */
+      }
+
+      .formatted-quill-content h6 {
+        font-size: 0.875rem; /* 14px */
       }
     </style>
   </head>
@@ -128,15 +163,18 @@
       <!-- Title Section -->
       <div class="relative py-[2%]">
         <!-- <h1 class="sm:text-4xl text-4xl text-black text-center font-agency">
-          5.
+          1.
         </h1> -->
-        <h1 class="sm:text-4xl text-4xl text-black text-center font-agency">
-          5. Melodi
+        <h1
+          class="sm:text-4xl text-4xl text-black text-center font-agency"
+          id="music-type"
+        >
+          5. <span id="music-type-name">Melodi</span>
         </h1>
         <img
           src="../assets/pointer-down-fixed.png"
           alt=""
-          class="absolute w-[20%] right-3 sm:top-10 top-12 transform-none"
+          class="absolute w-[20%] right-3 sm:top-3 top-3 transform-none"
         />
         <!-- Right Top Navigation (25%) -->
         <div
@@ -197,7 +235,7 @@
         <img
           src="../assets/pointer-down-fixed.png"
           alt=""
-          class="absolute w-[20%] right-3 top-0 transform-none"
+          class="absolute w-[20%] right-3 sm:top-1 top-3 transform-none"
         />
       </div>
 
@@ -210,7 +248,7 @@
       >
         <p
           id="question-text"
-          class="w-full text-center text-[#FFC000] font-arial-normal overflow-y-auto px-[2%] sm:px-[8%] py-[2%] text-lg sm:text-md h-[12vh] sm:h-[20vh] md:h-[25vh]"
+          class="w-full text-center text-[#FFC000] font-arial-normal overflow-y-auto px-[2%] sm:px-[8%] py-[1%] text-lg sm:text-md h-[12vh] sm:h-[20vh] md:h-[25vh]"
           style="scrollbar-width: none; -ms-overflow-style: none"
         ></p>
 
@@ -274,7 +312,7 @@
 
         <div
           id="factDrawer"
-          class="mb-[2%] sm:mb-[4%] absolute -bottom-[100px] h-[93vh] left-1/2 transform -translate-x-1/2 z-50 w-full translate-y-full transition-transform duration-300 hidden"
+          class="mb-[2%] sm:mb-[4%] absolute -bottom-[100px] h-[99vh] sm:h-[97vh] left-1/2 transform -translate-x-1/2 z-50 w-full translate-y-full transition-transform duration-300 hidden"
         >
           <!-- Close Button -->
           <div
@@ -293,9 +331,12 @@
             class="h-[calc(100%-11rem)] py-2 bg-[#FFC000] px-6 overflow-y-auto scrollbar-hide"
           >
             <div
-              id="factDrawerContent"
+              id="factDrawerContentt"
               class="text-black formatted-quill-content"
             >
+              <h1>Nyttig å vite</h1>
+              <h2>Nyttig å vite</h2>
+
               <p><strong>Welcome to the Music App</strong></p>
 
               <p>
